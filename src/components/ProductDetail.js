@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import './ProductDetail.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import "./ProductDetail.css";
+import { API_URL } from "../apiConfig";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -13,10 +14,10 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
+        const response = await axios.get(`${API_URL}/${id}`);
         setProduct(response.data);
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
       }
     };
 
@@ -27,9 +28,13 @@ const ProductDetail = () => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
       if (i < rating) {
-        stars.push(<FontAwesomeIcon icon={faStar} key={i} style={{ color: '#ffc107' }} />);
+        stars.push(
+          <FontAwesomeIcon icon={faStar} key={i} style={{ color: "#ffc107" }} />
+        );
       } else {
-        stars.push(<FontAwesomeIcon icon={faStar} key={i} style={{ color: '#e4e5e9' }} />);
+        stars.push(
+          <FontAwesomeIcon icon={faStar} key={i} style={{ color: "#e4e5e9" }} />
+        );
       }
     }
     return stars;
@@ -41,14 +46,21 @@ const ProductDetail = () => {
         <Row>
           <Col md={6}>
             <Card>
-              <Card.Img variant="top" src={product.image} className="product-detail-image" />
+              <Card.Img
+                variant="top"
+                src={product.image}
+                className="product-detail-image"
+              />
             </Card>
           </Col>
           <Col md={6} className="product-detail-info">
             <h2>{product.title}</h2>
             <p>{product.description}</p>
             <p>Price: ${product.price}</p>
-            <p>Ratings: {renderStars(product.rating.rate)} ({product.rating.count} reviews)</p>
+            <p>
+              Ratings: {renderStars(product.rating.rate)} (
+              {product.rating.count} reviews)
+            </p>
           </Col>
         </Row>
       )}

@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Row, Col, Card, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './Home.css'; 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./Home.css";
+import { API_URL } from "../apiConfig";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://fakestoreapi.com/products');
+        const response = await axios.get(API_URL);
         setProducts(response.data);
         setFilteredProducts(response.data);
-        
+
         const categories = response.data.reduce((acc, product) => {
           if (!acc.includes(product.category)) {
             acc.push(product.category);
@@ -25,7 +26,7 @@ const Home = () => {
         }, []);
         setCategories(categories);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -35,10 +36,12 @@ const Home = () => {
   const handleCategoryChange = (event) => {
     const category = event.target.value;
     setSelectedCategory(category);
-    if (category === '') {
+    if (category === "") {
       setFilteredProducts(products);
     } else {
-      const filtered = products.filter(product => product.category === category);
+      const filtered = products.filter(
+        (product) => product.category === category
+      );
       setFilteredProducts(filtered);
     }
   };
@@ -46,26 +49,33 @@ const Home = () => {
   return (
     <Container>
       <Form.Group className="mt-5 mb-4" controlId="categoryFilter">
-        <Form.Control as="select" value={selectedCategory} onChange={handleCategoryChange}>
+        <Form.Control
+          as="select"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
           <option value="">All Categories</option>
           {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
+            <option key={index} value={category}>
+              {category}
+            </option>
           ))}
         </Form.Control>
       </Form.Group>
       <Row>
-        {filteredProducts.slice(0, 30).map(product => (
+        {filteredProducts.slice(0, 30).map((product) => (
           <Col key={product.id} xs={12} sm={6} md={4} lg={3}>
             <Card className="mb-4">
-              <Link to={`/product/${product.id}`} className="text-decoration-none text-dark">
+              <Link
+                to={`/product/${product.id}`}
+                className="text-decoration-none text-dark"
+              >
                 <div className="card-image-container">
                   <Card.Img src={product.image} className="card-image" />
                 </div>
                 <div className="card-body">
-                <Card.Body>
                   <Card.Title className="card-text">{product.title}</Card.Title>
                   <Card.Text className="card-text">${product.price}</Card.Text>
-                </Card.Body>
                 </div>
               </Link>
             </Card>
