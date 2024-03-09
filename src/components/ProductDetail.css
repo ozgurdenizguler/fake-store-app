@@ -1,0 +1,17 @@
+.product-detail-container {
+    max-width: 800px;
+    margin: 0 auto; 
+    padding: 20px; 
+  }
+  
+  .product-detail-image {
+    width: 100%;
+    max-height: 400px; 
+    object-fit: contain; 
+    margin-bottom: 20px; 
+  }
+  
+  .product-detail-info {
+    text-align: center;
+  }
+  
